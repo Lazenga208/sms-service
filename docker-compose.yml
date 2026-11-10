@@ -1,0 +1,23 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - sqlite_data:/data
+    environment:
+      DATABASE_URL: sqlite:////data/sms.db
+      SMS_PROVIDER_URL: http://mock-sms:8001
+    depends_on:
+      - mock-sms
+
+  mock-sms:
+    build: ./mock-sms-provider
+    ports:
+      - "8001:8001"
+    volumes:
+      - ./mock-sms-provider:/app
+
+volumes:
+  sqlite_data:
